@@ -1,14 +1,13 @@
 <template>
   <div class="filter-tabs">
     <button
-      v-for="item in data"
-      :key="item"
-      @click="() => activateFilter(item)"
-      class="filter-tab"
-      :class="{ active: filter === item }"
+      v-for="tab in tabs"
+      :key="tab"
+      @click="() => activateFilter(tab)"
+      :class="['filter-tab', { active: tab === currentTab }]"
       type="button"
     >
-      {{ item }}
+      {{ tab }}
     </button>
   </div>
 </template>
@@ -18,17 +17,17 @@
 export default {
   name: 'FilterTabs',
   props: {
-    data: [],
+    tabs: Array,
     onClickHandler: Function
   },
   data() {
     return {
-      filter: ''
+      currentTab: ''
     }
   },
   methods: {
-    activateFilter(current) {
-      this.filter = (this.filter === current) ? '': current;
+    activateFilter(filter) {
+      this.filter = (this.currentTab === filter) ? '': filter;
       this.onClickHandler(this.filter);
     }
   }

@@ -1,9 +1,9 @@
 <template>
   <article class="card">
     <h2 class="card-title">
-      <a :href="data.url" target="_blank">{{ data.title }}</a>
+      {{ data.title }}
     </h2>
-    <p>{{ data.organization }}</p>
+    <p><a :href="data.url" target="_blank">{{ data.organization }} ↗</a></p>
   </article>
 </template>
 

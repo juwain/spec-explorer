@@ -2,7 +2,7 @@
   <div v-if="specificationsData.length > 0">
     <div class="specifications-filter">
       <filter-tabs
-        :data="specificationsNames"
+        :tabs="specificationsNames"
         :onClickHandler="onTabClick"
       />
 
