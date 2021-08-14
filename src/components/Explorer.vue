@@ -6,9 +6,9 @@
         :onClickHandler="onTabClick"
       />
 
-      <label>
-        Поиск: <input type="text" v-model="searchQuery" />
-      </label>
+      <search-input
+        :onInputHandler="onSearchInput"
+      />
     </div>
 
     <div class="specifications-grid">
@@ -27,6 +27,7 @@
 <script>
 import Specification from './Specification.vue';
 import FilterTabs from './FilterTabs.vue';
+import SearchInput from './SearchInput.vue';
 import {specURL} from '../service/constants.js';
 
 export default {
@@ -35,7 +36,8 @@ export default {
   },
   components: {
     'specification-card': Specification,
-    'filter-tabs': FilterTabs
+    'filter-tabs': FilterTabs,
+    'search-input': SearchInput
   },
   data() {
     return  {
@@ -85,6 +87,9 @@ export default {
     },
     onTabClick(currentOrganization) {
       this.filterKey = currentOrganization;
+    },
+    onSearchInput(query) {
+      this.searchQuery = query;
     }
   }
 }
