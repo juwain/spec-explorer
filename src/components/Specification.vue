@@ -22,6 +22,7 @@ export default {
   padding: 15px;
   border: 1px solid #cccccc;
   border-radius: 3px;
+  overflow-wrap: break-word;
 }
 
 .card-title a {

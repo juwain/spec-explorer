@@ -2,12 +2,13 @@
   <div v-if="specificationsData.length > 0">
     <filter-tabs
       :data="specificationsNames"
+      :onClickHandler="onTabClick"
       class="specifications-filter"
     />
 
     <div class="specifications-grid">
       <specification-card
-        v-for="specification in specificationsData"
+        v-for="specification in filteredSpecifications"
         :key="specification.url"
         :data="specification"
       />
@@ -34,6 +35,7 @@ export default {
   data() {
     return  {
       specificationsData: [],
+      filterKey: ''
     }
   },
   computed: {
@@ -47,6 +49,17 @@ export default {
 
         return acc;
       }, [])
+    },
+    filteredSpecifications() {
+      let filtered = this.specificationsData;
+
+      if (this.filterKey.length > 0) {
+        filtered = this.specificationsData.filter((item) => {
+          return item.organization === this.filterKey;
+        })
+      }
+
+      return filtered;
     }
   },
   created() {
@@ -57,6 +70,9 @@ export default {
       fetch(specURL)
         .then((response) => response.json())
         .then((data) => this.specificationsData = data.results);
+    },
+    onTabClick(currentOrganization) {
+      this.filterKey = currentOrganization;
     }
   }
 }
