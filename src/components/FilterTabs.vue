@@ -1,14 +1,14 @@
 <template>
   <div class="filter-tabs">
     <button
-      v-for="item in data"
-      :key="item"
-      @click="() => activateFilter(item)"
+      v-for="filter in data"
+      :key="filter"
+      @click="() => activateFilter(filter)"
       class="filter-tab"
-      :class="{ active: current === item }"
+      :class="{ active: current === filter }"
       type="button"
     >
-      {{ item }}
+      {{ filter }}
     </button>
   </div>
 </template>
@@ -27,9 +27,9 @@ export default {
     }
   },
   methods: {
-    activateFilter(item) {
-      this.current = item;
-      this.onClickHandler(item);
+    activateFilter(filter) {
+      this.current = (this.current === filter) ? '': filter;
+      this.onClickHandler(this.current);
     }
   }
 }
@@ -38,7 +38,6 @@ export default {
 <style scoped>
 .filter-tabs {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 100px);
   grid-auto-flow: column;
   gap: 20px;
 }
@@ -50,11 +49,11 @@ export default {
   outline: none;
 }
 
-.filter-tab:hover {
+.filter-tab:hover:not(.active) {
   --border-color: #999999;
 }
 
-.filter-tab:focus-visible {
+.filter-tab:focus-visible:not(.active) {
   --border-color: #999999;
 }
 

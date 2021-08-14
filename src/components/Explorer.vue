@@ -1,10 +1,15 @@
 <template>
   <div v-if="specificationsData.length > 0">
-    <filter-tabs
-      :data="specificationsNames"
-      :onClickHandler="onTabClick"
-      class="specifications-filter"
-    />
+    <div class="specifications-filter">
+      <filter-tabs
+        :data="specificationsNames"
+        :onClickHandler="onTabClick"
+      />
+
+      <label>
+        Поиск: <input type="text" v-model="searchQuery" />
+      </label>
+    </div>
 
     <div class="specifications-grid">
       <specification-card
@@ -35,7 +40,8 @@ export default {
   data() {
     return  {
       specificationsData: [],
-      filterKey: ''
+      filterKey: '',
+      searchQuery: ''
     }
   },
   computed: {
@@ -56,6 +62,12 @@ export default {
       if (this.filterKey.length > 0) {
         filtered = this.specificationsData.filter((item) => {
           return item.organization === this.filterKey;
+        })
+      }
+
+      if (this.searchQuery.trim().length > 0) {
+        filtered = filtered.filter((item) => {
+          return item.title.toLowerCase().includes(this.searchQuery);
         })
       }
 
@@ -86,6 +98,8 @@ export default {
 }
 
 .specifications-filter {
+  display: flex;
+  justify-content: space-between;
   margin-block-end: 20px;
 }
 </style>
