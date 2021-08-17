@@ -1,12 +1,9 @@
 <template>
   <article class="spec-card">
     <h2 class="spec-card-title">
-      <a
-        :href="data.shortname"
-        @click.prevent="navigateToSpec(data.shortname)"
-      >
+      <router-link :to="'/spec/' + data.shortname">
         {{ data.title }}
-      </a>
+      </router-link>
     </h2>
     <p>
       <a
@@ -24,13 +21,7 @@
 export default {
   name: 'SpecificationCard',
   props: {
-    data: Object,
-    onClickHandler: Function
-  },
-  methods: {
-    navigateToSpec(spec) {
-      this.onClickHandler(spec);
-    }
+    data: Object
   }
 }
 </script>

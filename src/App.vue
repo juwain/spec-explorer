@@ -1,15 +1,11 @@
 <template>
-  <specifications-explorer class="container" />
+  <router-view/>
 </template>
 
 <script>
-import Explorer from './components/Explorer.vue';
 
 export default {
-  name: 'App',
-  components: {
-    'specifications-explorer': Explorer
-  }
+  name: 'App'
 }
 </script>
 

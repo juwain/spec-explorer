@@ -16,7 +16,6 @@
         v-for="specification in filteredSpecifications"
         :key="specification.url"
         :data="specification"
-        :onClickHandler="onCardClick"
       />
     </div>
   </div>
@@ -92,10 +91,6 @@ export default {
     },
     onSearchInput(query) {
       this.searchQuery = query;
-    },
-    onCardClick(spec) {
-      this.currentSpecification = spec;
-      console.log(this.currentSpecification)
     }
   }
 }
