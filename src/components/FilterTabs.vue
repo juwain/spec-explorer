@@ -27,8 +27,8 @@ export default {
   },
   methods: {
     activateFilter(filter) {
-      this.filter = (this.currentTab === filter) ? '': filter;
-      this.onClickHandler(this.filter);
+      this.currentTab = (this.currentTab === filter) ? '': filter;
+      this.onClickHandler(this.currentTab);
     }
   }
 }
