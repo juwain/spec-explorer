@@ -27,7 +27,7 @@ import {specURL} from '../service/constants.js';
 export default {
   name: 'SpecificationDetails',
   props: {
-    id: SVGStringList
+    id: String
   },
   data() {
     return  {

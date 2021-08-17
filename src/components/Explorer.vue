@@ -2,7 +2,7 @@
   <div v-if="specificationsData.length > 0">
     <div class="specifications-filter">
       <filter-tabs
-        :tabs="specificationsNames"
+        :tabs="specificationsOrgs"
         :onClickHandler="onTabClick"
       />
 
@@ -47,7 +47,7 @@ export default {
     }
   },
   computed: {
-    specificationsNames() {
+    specificationsOrgs() {
       return this.specificationsData.reduce((acc, value) => {
         const organization = value.organization;
 
