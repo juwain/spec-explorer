@@ -3,7 +3,7 @@
     <button
       v-for="tab in tabs"
       :key="tab"
-      @click="() => activateFilter(tab)"
+      @click="activateFilter(tab)"
       :class="['filter-tab', { active: tab === currentTab }]"
       type="button"
     >

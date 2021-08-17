@@ -16,6 +16,7 @@
         v-for="specification in filteredSpecifications"
         :key="specification.url"
         :data="specification"
+        :onClickHandler="onCardClick"
       />
     </div>
   </div>
@@ -25,7 +26,7 @@
 </template>
 
 <script>
-import Specification from './Specification.vue';
+import Specification from './SpecificationCard.vue';
 import FilterTabs from './FilterTabs.vue';
 import SearchInput from './SearchInput.vue';
 import {specURL} from '../service/constants.js';
@@ -43,7 +44,8 @@ export default {
     return  {
       specificationsData: [],
       filterKey: '',
-      searchQuery: ''
+      searchQuery: '',
+      currentSpecification: ''
     }
   },
   computed: {
@@ -90,6 +92,10 @@ export default {
     },
     onSearchInput(query) {
       this.searchQuery = query;
+    },
+    onCardClick(spec) {
+      this.currentSpecification = spec;
+      console.log(this.currentSpecification)
     }
   }
 }
