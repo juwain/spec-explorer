@@ -32,8 +32,6 @@ import {indexURL} from '../service/constants.js';
 
 export default {
   name: 'Explorer',
-  props: {
-  },
   components: {
     'specification-card': SpecificationCard,
     'filter-tabs': FilterTabs,

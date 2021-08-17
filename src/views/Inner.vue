@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import SpecificationDetails from '../components/SpecificationDetails.vue';
+import Specification from '../components/Specification.vue';
 
 export default {
   name: 'Inner',
   components: {
-    'specification-details': SpecificationDetails
+    'specification-details': Specification
   }
 }
 </script>
