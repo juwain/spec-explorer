@@ -25,17 +25,17 @@
 </template>
 
 <script>
-import Specification from './SpecificationCard.vue';
+import SpecificationCard from './SpecificationCard.vue';
 import FilterTabs from './FilterTabs.vue';
 import SearchInput from './SearchInput.vue';
-import {specURL} from '../service/constants.js';
+import {indexURL} from '../service/constants.js';
 
 export default {
   name: 'Explorer',
   props: {
   },
   components: {
-    'specification-card': Specification,
+    'specification-card': SpecificationCard,
     'filter-tabs': FilterTabs,
     'search-input': SearchInput
   },
@@ -43,8 +43,7 @@ export default {
     return  {
       specificationsData: [],
       filterKey: '',
-      searchQuery: '',
-      currentSpecification: ''
+      searchQuery: ''
     }
   },
   computed: {
@@ -82,7 +81,7 @@ export default {
   },
   methods: {
     fetchData() {
-      fetch(specURL)
+      fetch(indexURL)
         .then((response) => response.json())
         .then((data) => this.specificationsData = data.results);
     },
