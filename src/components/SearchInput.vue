@@ -1,6 +1,6 @@
 <template>
   <label class="search">
-    <span class="search-label">Поиск:</span>
+    <span class="search-label">Search:</span>
     <input
       @input="activateSearch"
       class="search-input"

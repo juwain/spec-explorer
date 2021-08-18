@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link to="/">⬅ Назад</router-link>
+    <router-link to="/">⬅ Back</router-link>
 
     <specification-details
       :id="$route.params.id"

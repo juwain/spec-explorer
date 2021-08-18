@@ -7,7 +7,7 @@
       <button
         type="button"
         v-if="index % pageSize === 0"
-        :class="[{ active: index / pageSize + 1 === currentPage }]"
+        :class="['pagination-button', { active: index / pageSize + 1 === currentPage }]"
         @click="paginate(index / pageSize + 1)"
       >
         {{ index / pageSize + 1 }}
@@ -45,8 +45,22 @@ export default {
   gap: 5px;
 }
 
-.pagination button:not(.active) {
+.pagination-button {
+  --border-color: transparent;
   background-color: transparent;
-  border: none;
+  border: 3px solid var(--border-color);
+  outline: none;
+}
+
+.pagination-button:hover:not(.active) {
+  --border-color: #999999;
+}
+
+.pagination-button:focus-visible:not(.active) {
+  --border-color: #999999;
+}
+
+.active {
+  --border-color: #000000;
 }
 </style>
