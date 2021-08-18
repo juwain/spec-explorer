@@ -9,18 +9,19 @@
     </a>
   </h1>
   <div v-if="specificationData.length > 0">
-    <div class="specifications-filter">
-      <filter-tabs
-        :tabs="dfnsTypes"
-        :onClickHandler="onTabClick"
+    <filter-tabs
+      :tabs="dfnsTypes"
+      :onClickHandler="onTabClick"
+      class="specification-filter"
+    />
+
+    <div class="specification-dfns">
+      <specification-details
+        v-for="dfn in filteredDfns"
+        :key="dfn.id"
+        :data="dfn"
       />
     </div>
-
-    <specification-details
-      v-for="dfn in filteredDfns"
-      :key="dfn.uidrl"
-      :data="dfn"
-    />
   </div>
   <div v-else>
     Loading…
@@ -92,4 +93,12 @@ export default {
 </script>
 
 <style scoped>
+.specification-filter {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.specification-dfns > section {
+  border-bottom: 1px solid #f0f0f0;
+}
 </style>

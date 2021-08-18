@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="container">
     <router-link to="/">⬅ Назад</router-link>
 
     <specification-details
