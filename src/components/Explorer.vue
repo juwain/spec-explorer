@@ -11,6 +11,15 @@
       />
     </div>
 
+    <pagination-nav
+      v-if="filteredSpecifications.length > pageSize"
+      :pageSize="pageSize"
+      :currentPage="currentPage"
+      :count="filteredSpecifications.length"
+      :onClickHandler="setCurrentPage"
+      class="specifications-pagination"
+    />
+
     <div class="specifications-grid">
       <specification-card
         v-for="specification in slicedSpecifications"
@@ -18,14 +27,6 @@
         :data="specification"
       />
     </div>
-
-    <pagination-navigation
-      v-if="filteredSpecifications && filteredSpecifications.length > pageSize"
-      :pageSize="pageSize"
-      :currentPage="currentPage"
-      :count="filteredSpecifications.length"
-      :onClickHandler="setCurrentPage"
-    />
   </div>
   <div v-else>
     Loading…
@@ -45,7 +46,7 @@ export default {
     'specification-card': SpecificationCard,
     'filter-tabs': FilterTabs,
     'search-input': SearchInput,
-    'pagination-navigation': Pagination
+    'pagination-nav': Pagination
   },
   data() {
     return  {
@@ -129,6 +130,10 @@ export default {
 .specifications-filter {
   display: flex;
   justify-content: space-between;
+  margin-block-end: 20px;
+}
+
+.specifications-pagination {
   margin-block-end: 20px;
 }
 </style>
