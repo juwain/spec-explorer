@@ -13,11 +13,19 @@
 
     <div class="specifications-grid">
       <specification-card
-        v-for="specification in filteredSpecifications"
+        v-for="specification in slicedSpecifications"
         :key="specification.url"
         :data="specification"
       />
     </div>
+
+    <pagination-navigation
+      v-if="filteredSpecifications && filteredSpecifications.length > pageSize"
+      :pageSize="pageSize"
+      :currentPage="currentPage"
+      :count="filteredSpecifications.length"
+      :onClickHandler="setCurrentPage"
+    />
   </div>
   <div v-else>
     Loading…
@@ -28,6 +36,7 @@
 import SpecificationCard from './SpecificationCard.vue';
 import FilterTabs from './FilterTabs.vue';
 import SearchInput from './SearchInput.vue';
+import Pagination from './Pagination.vue';
 import {indexURL} from '../service/constants.js';
 
 export default {
@@ -35,13 +44,16 @@ export default {
   components: {
     'specification-card': SpecificationCard,
     'filter-tabs': FilterTabs,
-    'search-input': SearchInput
+    'search-input': SearchInput,
+    'pagination-navigation': Pagination
   },
   data() {
     return  {
       specificationsData: [],
       filterKey: '',
-      searchQuery: ''
+      searchQuery: '',
+      pageSize: 20,
+      currentPage: 1
     }
   },
   computed: {
@@ -72,6 +84,12 @@ export default {
       }
 
       return filtered;
+    },
+    slicedSpecifications() {
+      const startIndex = this.currentPage * this.pageSize - this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+
+      return this.filteredSpecifications.slice(startIndex, endIndex);
     }
   },
   created() {
@@ -84,10 +102,18 @@ export default {
         .then((data) => this.specificationsData = data.results);
     },
     onTabClick(currentOrganization) {
+      this.resetCurrentPage();
       this.filterKey = currentOrganization;
     },
     onSearchInput(query) {
+      this.resetCurrentPage();
       this.searchQuery = query.toLowerCase();
+    },
+    setCurrentPage(page) {
+      this.currentPage = page;
+    },
+    resetCurrentPage() {
+      this.setCurrentPage(1);
     }
   }
 }
