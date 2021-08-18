@@ -87,7 +87,7 @@ export default {
       this.filterKey = currentOrganization;
     },
     onSearchInput(query) {
-      this.searchQuery = query;
+      this.searchQuery = query.toLowerCase();
     }
   }
 }
