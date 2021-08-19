@@ -16,9 +16,18 @@
       class="specification-filter"
     />
 
+    <pagination-nav
+      v-if="filteredDfns.length > pageSize"
+      :pageSize="pageSize"
+      :currentPage="currentPage"
+      :count="filteredDfns.length"
+      :onClickHandler="setCurrentPage"
+      class="specification-pagination"
+    />
+
     <div class="specification-dfns">
       <specification-details
-        v-for="dfn in filteredDfns"
+        v-for="dfn in slicedDfns"
         :key="dfn.id"
         :data="dfn"
       />
@@ -33,6 +42,7 @@
 import {specURL} from '../service/constants.js';
 import FilterTabs from './FilterTabs.vue';
 import SpecificationDetails from './SpecificationDetails.vue';
+import Pagination from './Pagination.vue';
 
 export default {
   name: 'Specification',
@@ -41,13 +51,16 @@ export default {
   },
   components: {
     'filter-tabs': FilterTabs,
-    'specification-details': SpecificationDetails
+    'specification-details': SpecificationDetails,
+    'pagination-nav': Pagination
   },
   data() {
     return  {
       specificationData: [],
       specification: {},
       filterKey: '',
+      pageSize: 20,
+      currentPage: 1
     }
   },
   computed: {
@@ -72,6 +85,12 @@ export default {
       }
 
       return filtered;
+    },
+    slicedDfns() {
+      const startIndex = this.currentPage * this.pageSize - this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+
+      return this.filteredDfns.slice(startIndex, endIndex);
     }
   },
   created() {
@@ -87,8 +106,15 @@ export default {
         });
     },
     onTabClick(currentType) {
+      this.resetCurrentPage();
       this.filterKey = currentType;
     },
+    setCurrentPage(page) {
+      this.currentPage = page;
+    },
+    resetCurrentPage() {
+      this.setCurrentPage(1);
+    }
   }
 }
 </script>
@@ -97,6 +123,11 @@ export default {
 .specification-filter {
   display: flex;
   flex-wrap: wrap;
+  margin-block-end: 20px;
+}
+
+.specification-pagination {
+  margin-block-end: 20px;
 }
 
 .specification-dfns > section {

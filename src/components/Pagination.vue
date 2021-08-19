@@ -27,7 +27,8 @@ export default {
   },
   data() {
     return {
-      pageIndex: this.currentPage
+      pageIndex: this.currentPage,
+      maxSteps: 5
     }
   },
   methods: {
