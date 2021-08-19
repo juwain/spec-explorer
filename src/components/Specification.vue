@@ -1,14 +1,15 @@
 <template>
-  <h1>
-    {{ specification.title }}
-    <a
-      :href="specification.url"
-      target="_blank"
-    >
-      ↗
-    </a>
-  </h1>
   <div v-if="specificationData.length > 0">
+    <h1>
+      {{ specification.title }}
+      <a
+        :href="specification.url"
+        target="_blank"
+      >
+        ↗
+      </a>
+    </h1>
+
     <filter-tabs
       :tabs="dfnsTypes"
       :onClickHandler="onTabClick"

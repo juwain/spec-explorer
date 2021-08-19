@@ -41,7 +41,7 @@ export default {
   padding: 15px;
   border: 1px solid #cccccc;
   border-radius: 3px;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 .spec-card-title a {
