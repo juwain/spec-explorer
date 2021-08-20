@@ -20,9 +20,15 @@
       class="specifications-pagination"
     />
 
+    <sorting-links
+      :sortings="sortings"
+      :onClickHandler="onSortingClick"
+      class="specifications-sorting"
+    />
+
     <div class="specifications-grid">
       <specification-card
-        v-for="specification in slicedSpecifications"
+        v-for="specification in sortedSpecifications"
         :key="specification.url"
         :data="specification"
       />
@@ -36,9 +42,12 @@
 <script>
 import SpecificationCard from './SpecificationCard.vue';
 import FilterTabs from './FilterTabs.vue';
+import Sorting from './Sorting.vue';
 import SearchInput from './SearchInput.vue';
 import Pagination from './Pagination.vue';
-import {indexURL} from '../service/constants.js';
+import { indexURL } from '../service/constants.js';
+import { sortByAlphabet, sortByDate } from '../service/sortingFunctions.js';
+import { SORT_ORDER } from '../service/enums.js';
 
 export default {
   name: 'Explorer',
@@ -46,15 +55,22 @@ export default {
     'specification-card': SpecificationCard,
     'filter-tabs': FilterTabs,
     'search-input': SearchInput,
-    'pagination-nav': Pagination
+    'pagination-nav': Pagination,
+    'sorting-links': Sorting
   },
   data() {
     return  {
       specificationsData: [],
       filterKey: '',
+      sortingKey: '',
+      sortingMode: '',
       searchQuery: '',
       pageSize: 20,
-      currentPage: 1
+      currentPage: 1,
+      sortings: [
+        { key: 'alphabet', text: 'by alphabet' },
+        { key: 'date', text: 'by date' }
+      ]
     }
   },
   computed: {
@@ -91,6 +107,28 @@ export default {
       const endIndex = startIndex + this.pageSize;
 
       return this.filteredSpecifications.slice(startIndex, endIndex);
+    },
+    sortedSpecifications() {
+      let sorted = this.slicedSpecifications;
+      let sortingFunction = () => {};
+
+      switch (this.sortingKey) {
+        case 'alphabet':
+          sortingFunction = sortByAlphabet;
+          break;
+
+        case 'date':
+          sortingFunction = sortByDate;
+          break;
+      }
+
+      sorted = sorted.sort(sortingFunction);
+
+      if (this.sortingMode === SORT_ORDER.DESC) {
+        sorted = sorted.reverse();
+      }
+
+      return sorted;
     }
   },
   created() {
@@ -102,9 +140,14 @@ export default {
         .then((response) => response.json())
         .then((data) => this.specificationsData = data.results);
     },
-    onTabClick(currentOrganization) {
+    onTabClick(filter) {
       this.resetCurrentPage();
-      this.filterKey = currentOrganization;
+      this.filterKey = filter;
+    },
+    onSortingClick(sorting, mode) {
+      this.resetCurrentPage();
+      this.sortingKey = sorting;
+      this.sortingMode = mode;
     },
     onSearchInput(query) {
       this.resetCurrentPage();
@@ -115,7 +158,7 @@ export default {
     },
     resetCurrentPage() {
       this.setCurrentPage(1);
-    }
+    },
   }
 }
 </script>
@@ -134,6 +177,10 @@ export default {
 }
 
 .specifications-pagination {
+  margin-block-end: 20px;
+}
+
+.specifications-sorting {
   margin-block-end: 20px;
 }
 </style>
