@@ -7,10 +7,10 @@
       <button
         type="button"
         v-if="index % pageSize === 0"
-        :class="['pagination-button', { active: index / pageSize + 1 === currentPage }]"
-        @click="paginate(index / pageSize + 1)"
+        :class="['pagination-button', { active: getNormalizedIndex(index) === currentPage }]"
+        @click="paginate(index)"
       >
-        {{ index / pageSize + 1 }}
+        {{ getNormalizedIndex(index) }}
       </button>
     </template>
   </div>
@@ -32,8 +32,12 @@ export default {
     }
   },
   methods: {
-    paginate(page) {
+    paginate(index) {
+      const page = this.getNormalizedIndex(index);
       this.onClickHandler(page);
+    },
+    getNormalizedIndex(index) {
+      return index / this.pageSize + 1;
     }
   }
 }
