@@ -47,7 +47,7 @@ import SearchInput from './SearchInput.vue';
 import Pagination from './Pagination.vue';
 import { indexURL } from '../service/constants.js';
 import { sortByAlphabet, sortByDate } from '../service/sortingFunctions.js';
-import { SORT_ORDER } from '../service/enums.js';
+import { SORT_ORDER, SORT_KEYS } from '../service/enums.js';
 
 export default {
   name: 'Explorer',
@@ -68,8 +68,8 @@ export default {
       pageSize: 20,
       currentPage: 1,
       sortings: [
-        { key: 'alphabet', text: 'by alphabet' },
-        { key: 'date', text: 'by date' }
+        { key: SORT_KEYS.ALPHABET, text: 'by alphabet', fn: sortByAlphabet },
+        { key: SORT_KEYS.DATE, text: 'by date', fn: sortByDate }
       ]
     }
   },
@@ -110,22 +110,15 @@ export default {
     },
     sortedSpecifications() {
       let sorted = this.slicedSpecifications;
-      let sortingFunction = () => {};
 
-      switch (this.sortingKey) {
-        case 'alphabet':
-          sortingFunction = sortByAlphabet;
-          break;
+      if (this.sortingKey !== '') {
+        sorted = sorted.sort(this.sortings.filter(({key}) => {
+          return key === this.sortingKey;
+        })[0].fn);
 
-        case 'date':
-          sortingFunction = sortByDate;
-          break;
-      }
-
-      sorted = sorted.sort(sortingFunction);
-
-      if (this.sortingMode === SORT_ORDER.DESC) {
-        sorted = sorted.reverse();
+        if (this.sortingMode === SORT_ORDER.DESC) {
+          sorted = sorted.reverse();
+        }
       }
 
       return sorted;
