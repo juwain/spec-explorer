@@ -97,13 +97,18 @@ export default {
     this.fetchData();
   },
   methods: {
-    fetchData() {
-      fetch(`${specURL}/${this.id}.json`)
-        .then((response) => response.json())
-        .then(({dfns, spec}) => {
-          this.specification = spec;
-          this.specificationData = dfns;
-        });
+    async fetchData() {
+      const response = await fetch(`${specURL}/${this.id}.json`);
+
+      if (!response.ok) {
+        const message = `An error has occured: ${response.status}`;
+        throw new Error(message);
+      }
+
+      const {dfns, spec} = await response.json();
+
+      this.specification = spec;
+      this.specificationData = dfns;
     },
     onTabClick(currentType) {
       this.resetCurrentPage();

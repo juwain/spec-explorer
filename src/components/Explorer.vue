@@ -126,10 +126,17 @@ export default {
     this.fetchData();
   },
   methods: {
-    fetchData() {
-      fetch(indexURL)
-        .then((response) => response.json())
-        .then((data) => this.specificationsData = data.results);
+    async fetchData() {
+      const response = await fetch(indexURL);
+
+      if (!response.ok) {
+        const message = `An error has occured: ${response.status}`;
+        throw new Error(message);
+      }
+
+      const data = await response.json();
+
+      this.specificationsData = data.results;
     },
     onTabClick(filter) {
       this.resetCurrentPage();
