@@ -1,17 +1,17 @@
 <template>
   <div class="sortings">
     <button
-      v-for="sorting in sortings"
-      :key="sorting.key"
-      @click="activateSorting(sorting.key)"
+      v-for="(value, name) in sortings"
+      :key="name"
+      @click="activateSorting(name)"
       :class="['sorting',
-        { 'active': sorting.key === currentSorting },
-        { 'ascending': sorting.key === currentSorting && currentMode === 'ASC' },
-        { 'descending': sorting.key === currentSorting && currentMode === 'DESC' }
+        { 'active': name === currentSorting },
+        { 'ascending': name === currentSorting && currentMode === 'ASC' },
+        { 'descending': name === currentSorting && currentMode === 'DESC' }
       ]"
       type="button"
     >
-      {{ sorting.text }}
+      {{ value.text }}
     </button>
   </div>
 </template>
@@ -22,7 +22,7 @@ import { SORT_ORDER } from '../service/enums.js';
 export default {
   name: 'Sorting',
   props: {
-    sortings: Array,
+    sortings: Object,
     onClickHandler: Function
   },
   data() {

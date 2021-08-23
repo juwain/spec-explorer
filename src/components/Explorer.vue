@@ -67,10 +67,10 @@ export default {
       searchQuery: '',
       pageSize: 20,
       currentPage: 1,
-      sortings: [
-        { key: SORT_KEYS.ALPHABET, text: 'by alphabet', fn: sortByAlphabet },
-        { key: SORT_KEYS.DATE, text: 'by date', fn: sortByDate }
-      ]
+      sortings: {
+        [SORT_KEYS.ALPHABET]: { text: 'by alphabet', fn: sortByAlphabet },
+        [SORT_KEYS.DATE]: { text: 'by date', fn: sortByDate }
+      }
     }
   },
   computed: {
@@ -112,9 +112,7 @@ export default {
       let sorted = this.slicedSpecifications;
 
       if (this.sortingKey !== '') {
-        sorted = sorted.sort(this.sortings.filter(({key}) => {
-          return key === this.sortingKey;
-        })[0].fn);
+        sorted = sorted.sort(this.sortings[this.sortingKey].fn);
 
         if (this.sortingMode === SORT_ORDER.DESC) {
           sorted = sorted.reverse();
