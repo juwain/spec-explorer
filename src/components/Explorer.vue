@@ -1,17 +1,17 @@
 <template>
   <div v-if="specificationsData.length > 0">
     <div class="specifications-filter">
-      <filter-tabs
+      <FilterTabs
         :tabs="specificationsOrgs"
         :onClickHandler="onTabClick"
       />
 
-      <search-input
+      <SearchInput
         :onInputHandler="onSearchInput"
       />
     </div>
 
-    <pagination-nav
+    <Pagination
       v-if="filteredSpecifications.length > pageSize"
       :pageSize="pageSize"
       :currentPage="currentPage"
@@ -20,14 +20,14 @@
       class="specifications-pagination"
     />
 
-    <sorting-links
+    <Sorting
       :sortings="sortings"
       :onClickHandler="onSortingClick"
       class="specifications-sorting"
     />
 
     <div class="specifications-grid">
-      <specification-card
+      <SpecificationCard
         v-for="specification in sortedSpecifications"
         :key="specification.url"
         :data="specification"
@@ -52,11 +52,11 @@ import { SORT_ORDER, SORT_KEYS } from '../service/enums.js';
 export default {
   name: 'Explorer',
   components: {
-    'specification-card': SpecificationCard,
-    'filter-tabs': FilterTabs,
-    'search-input': SearchInput,
-    'pagination-nav': Pagination,
-    'sorting-links': Sorting
+    SpecificationCard,
+    FilterTabs,
+    SearchInput,
+    Pagination,
+    Sorting
   },
   data() {
     return  {

@@ -10,13 +10,13 @@
       </a>
     </h1>
 
-    <filter-tabs
+    <FilterTabs
       :tabs="dfnsTypes"
       :onClickHandler="onTabClick"
       class="specification-filter"
     />
 
-    <pagination-nav
+    <Pagination
       v-if="filteredDfns.length > pageSize"
       :pageSize="pageSize"
       :currentPage="currentPage"
@@ -26,10 +26,11 @@
     />
 
     <div class="specification-dfns">
-      <specification-details
+      <SpecificationDetails
         v-for="dfn in slicedDfns"
         :key="dfn.id"
         :data="dfn"
+        class="specification-dfn"
       />
     </div>
   </div>
@@ -50,9 +51,9 @@ export default {
     id: String
   },
   components: {
-    'filter-tabs': FilterTabs,
-    'specification-details': SpecificationDetails,
-    'pagination-nav': Pagination
+    FilterTabs,
+    SpecificationDetails,
+    Pagination
   },
   data() {
     return  {
@@ -135,7 +136,7 @@ export default {
   margin-block-end: 20px;
 }
 
-.specification-dfns > section {
+.specification-dfn {
   border-bottom: 1px solid #f0f0f0;
 }
 </style>
