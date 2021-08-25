@@ -44,21 +44,52 @@ import {specURL} from '../service/constants.js';
 import FilterTabs from './FilterTabs.vue';
 import SpecificationDetails from './SpecificationDetails.vue';
 import Pagination from './Pagination.vue';
+import {  ref, onMounted, watch, toRefs } from 'vue';
 
 export default {
   name: 'Specification',
   props: {
-    id: String
+    id: {
+      type: String,
+      required: true
+    }
   },
   components: {
     FilterTabs,
     SpecificationDetails,
     Pagination
   },
+  setup (props) {
+    const { id } = toRefs(props);
+
+    let specification = ref({});
+    let specificationData = ref([]);
+
+    const getSpecificationData = async () => {
+      const response = await fetch(`${specURL}/${id.value}.json`);
+
+      if (!response.ok) {
+        const message = `An error has occured: ${response.status}`;
+        throw new Error(message);
+      }
+
+      const {dfns, spec} = await response.json();
+
+      specification.value = spec;
+      specificationData.value = dfns;
+    }
+
+    onMounted(getSpecificationData);
+    watch(id, getSpecificationData);
+
+    return {
+      specification,
+      specificationData,
+      getSpecificationData
+    }
+  },
   data() {
     return  {
-      specificationData: [],
-      specification: {},
       filterKey: '',
       pageSize: 20,
       currentPage: 1
@@ -94,23 +125,7 @@ export default {
       return this.filteredDfns.slice(startIndex, endIndex);
     }
   },
-  created() {
-    this.fetchData();
-  },
   methods: {
-    async fetchData() {
-      const response = await fetch(`${specURL}/${this.id}.json`);
-
-      if (!response.ok) {
-        const message = `An error has occured: ${response.status}`;
-        throw new Error(message);
-      }
-
-      const {dfns, spec} = await response.json();
-
-      this.specification = spec;
-      this.specificationData = dfns;
-    },
     onTabClick(currentType) {
       this.resetCurrentPage();
       this.filterKey = currentType;
@@ -121,7 +136,7 @@ export default {
     resetCurrentPage() {
       this.setCurrentPage(1);
     }
-  }
+  },
 }
 </script>
 
