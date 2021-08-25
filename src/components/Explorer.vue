@@ -28,7 +28,7 @@
 
     <div class="specifications-grid">
       <SpecificationCard
-        v-for="specification in sortedSpecifications"
+        v-for="specification in slicedSpecifications"
         :key="specification.url"
         :data="specification"
       />
@@ -102,14 +102,8 @@ export default {
 
       return filtered;
     },
-    slicedSpecifications() {
-      const startIndex = this.currentPage * this.pageSize - this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-
-      return this.filteredSpecifications.slice(startIndex, endIndex);
-    },
     sortedSpecifications() {
-      let sorted = this.slicedSpecifications;
+      let sorted = this.filteredSpecifications;
 
       if (this.sortingKey !== '') {
         sorted = sorted.sort(this.sortings[this.sortingKey].fn);
@@ -120,6 +114,12 @@ export default {
       }
 
       return sorted;
+    },
+    slicedSpecifications() {
+      const startIndex = this.currentPage * this.pageSize - this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+
+      return this.sortedSpecifications.slice(startIndex, endIndex);
     }
   },
   created() {
