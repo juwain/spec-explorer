@@ -1,5 +1,5 @@
 <template>
-  <div v-if="specificationsData.length > 0">
+  <div v-if="specifications.length > 0">
     <div class="specifications-filter">
       <FilterTabs
         :tabs="specificationsOrgs"
@@ -45,9 +45,9 @@ import FilterTabs from './FilterTabs.vue';
 import Sorting from './Sorting.vue';
 import SearchInput from './SearchInput.vue';
 import Pagination from './Pagination.vue';
-import { indexURL } from '../service/constants.js';
 import { sortByAlphabet, sortByDate } from '../service/sortingFunctions.js';
 import { SORT_ORDER, SORT_KEYS } from '../service/enums.js';
+import useSpecifications from '../composables/useSpecifications.js';
 
 export default {
   name: 'Explorer',
@@ -58,9 +58,19 @@ export default {
     Pagination,
     Sorting
   },
+  setup () {
+    const {
+      specifications,
+      getSpecifications
+    } = useSpecifications();
+
+    return {
+      specifications,
+      getSpecifications
+    }
+  },
   data() {
     return  {
-      specificationsData: [],
       filterKey: '',
       sortingKey: '',
       sortingMode: '',
@@ -75,7 +85,7 @@ export default {
   },
   computed: {
     specificationsOrgs() {
-      return this.specificationsData.reduce((acc, value) => {
+      return this.specifications.reduce((acc, value) => {
         const organization = value.organization;
 
         if (!acc.includes(organization)) {
@@ -86,10 +96,10 @@ export default {
       }, [])
     },
     filteredSpecifications() {
-      let filtered = this.specificationsData;
+      let filtered = this.specifications;
 
       if (this.filterKey.length > 0) {
-        filtered = this.specificationsData.filter((item) => {
+        filtered = this.specifications.filter((item) => {
           return item.organization === this.filterKey;
         })
       }
@@ -122,22 +132,7 @@ export default {
       return this.sortedSpecifications.slice(startIndex, endIndex);
     }
   },
-  created() {
-    this.fetchData();
-  },
   methods: {
-    async fetchData() {
-      const response = await fetch(indexURL);
-
-      if (!response.ok) {
-        const message = `An error has occured: ${response.status}`;
-        throw new Error(message);
-      }
-
-      const data = await response.json();
-
-      this.specificationsData = data.results;
-    },
     onTabClick(filter) {
       this.resetCurrentPage();
       this.filterKey = filter;

@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import {specURL} from '../service/constants.js';
 import FilterTabs from './FilterTabs.vue';
 import SpecificationDetails from './SpecificationDetails.vue';
 import Pagination from './Pagination.vue';
-import {  ref, onMounted, watch, toRefs } from 'vue';
+import { toRefs } from 'vue';
+import useSpecificationData from '../composables/useSpecificationData.js';
 
 export default {
   name: 'Specification',
@@ -62,25 +62,11 @@ export default {
   setup (props) {
     const { id } = toRefs(props);
 
-    let specification = ref({});
-    let specificationData = ref([]);
-
-    const getSpecificationData = async () => {
-      const response = await fetch(`${specURL}/${id.value}.json`);
-
-      if (!response.ok) {
-        const message = `An error has occured: ${response.status}`;
-        throw new Error(message);
-      }
-
-      const {dfns, spec} = await response.json();
-
-      specification.value = spec;
-      specificationData.value = dfns;
-    }
-
-    onMounted(getSpecificationData);
-    watch(id, getSpecificationData);
+    const {
+      specification,
+      specificationData,
+      getSpecificationData
+    } = useSpecificationData(id);
 
     return {
       specification,
