@@ -91,7 +91,7 @@ export default {
         }
 
         return acc;
-      }, [])
+      }, []).sort();
     },
     filteredDfns() {
       let filtered = this.specificationData;

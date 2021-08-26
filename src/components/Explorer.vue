@@ -93,7 +93,7 @@ export default {
         }
 
         return acc;
-      }, [])
+      }, []).sort();
     },
     filteredSpecifications() {
       let filtered = this.specifications;
