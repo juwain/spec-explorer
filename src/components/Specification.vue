@@ -46,6 +46,7 @@ import Pagination from './Pagination.vue';
 import { toRefs } from 'vue';
 import useSpecificationData from '../composables/useSpecificationData.js';
 import useDataFilter from '../composables/useDataFilter.js';
+import computedSpecificationDfnTypes from '../composables/computedSpecificationDfnTypes.js';
 
 export default {
   name: 'Specification',
@@ -74,10 +75,13 @@ export default {
       filterHandler
     } = useDataFilter(specificationData);
 
+    const { dfnsTypes } = computedSpecificationDfnTypes(specificationData);
+
     return {
       specification,
       specificationData,
       getSpecificationData,
+      dfnsTypes,
       filteredDfns: filteredData,
       onTabClick: filterHandler
     }
@@ -89,17 +93,6 @@ export default {
     }
   },
   computed: {
-    dfnsTypes() {
-      return this.specificationData.reduce((acc, value) => {
-        const type = value.type;
-
-        if (!acc.includes(type)) {
-          acc.push(type);
-        }
-
-        return acc;
-      }, []).sort();
-    },
     slicedDfns() {
       const startIndex = this.currentPage * this.pageSize - this.pageSize;
       const endIndex = startIndex + this.pageSize;
