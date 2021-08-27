@@ -43,8 +43,9 @@
 import FilterTabs from './FilterTabs.vue';
 import SpecificationDetails from './SpecificationDetails.vue';
 import Pagination from './Pagination.vue';
-import { toRefs, ref, watch, onMounted } from 'vue';
+import { toRefs } from 'vue';
 import useSpecificationData from '../composables/useSpecificationData.js';
+import useDataFilter from '../composables/useDataFilter.js';
 
 export default {
   name: 'Specification',
@@ -61,8 +62,6 @@ export default {
   },
   setup (props) {
     const { id } = toRefs(props);
-    const filterKey = ref('');
-    const filteredDfns = ref([]);
 
     const {
       specification,
@@ -70,32 +69,17 @@ export default {
       getSpecificationData
     } = useSpecificationData(id);
 
-    const filtered = () => {
-      let result = specificationData.value;
-
-      if (filterKey.value.length > 0) {
-        result = result.filter(item => {
-          return item.type === filterKey.value;
-        })
-      }
-
-      filteredDfns.value = result;
-    }
-
-    const onTabClick = (currentType) => {
-      filterKey.value = currentType;
-    }
-
-    onMounted(filtered);
-
-    watch([filterKey, specificationData], filtered)
+    const {
+      filteredData,
+      filterHandler
+    } = useDataFilter(specificationData);
 
     return {
       specification,
       specificationData,
       getSpecificationData,
-      filteredDfns,
-      onTabClick
+      filteredDfns: filteredData,
+      onTabClick: filterHandler
     }
   },
   data() {
