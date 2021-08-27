@@ -21,7 +21,7 @@
       :pageSize="pageSize"
       :currentPage="currentPage"
       :count="filteredDfns.length"
-      :onClickHandler="setCurrentPage"
+      :onClickHandler="onPaginationClick"
       class="specification-pagination"
     />
 
@@ -46,6 +46,7 @@ import Pagination from './Pagination.vue';
 import { toRefs } from 'vue';
 import useSpecificationData from '../composables/useSpecificationData.js';
 import useDataFilter from '../composables/useDataFilter.js';
+import useDataSlicer from '../composables/useDataSlicer.js';
 import computedSpecificationDfnTypes from '../composables/computedSpecificationDfnTypes.js';
 
 export default {
@@ -70,44 +71,35 @@ export default {
       getSpecificationData
     } = useSpecificationData(id);
 
+    const { dfnsTypes } = computedSpecificationDfnTypes(specificationData);
+
     const {
       filteredData,
       filterHandler
     } = useDataFilter(specificationData);
 
-    const { dfnsTypes } = computedSpecificationDfnTypes(specificationData);
+    const {
+      slicedData,
+      sliceHandler,
+      resetPagination,
+      pageSize,
+      currentPage
+    } = useDataSlicer(filteredData);
 
     return {
       specification,
       specificationData,
       getSpecificationData,
       dfnsTypes,
+      slicedDfns: slicedData,
+      onPaginationClick: sliceHandler,
+      resetPagination,
+      pageSize,
+      currentPage,
       filteredDfns: filteredData,
-      onTabClick: filterHandler
+      onTabClick: filterHandler,
     }
-  },
-  data() {
-    return  {
-      pageSize: 20,
-      currentPage: 1
-    }
-  },
-  computed: {
-    slicedDfns() {
-      const startIndex = this.currentPage * this.pageSize - this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-
-      return this.filteredDfns.slice(startIndex, endIndex);
-    }
-  },
-  methods: {
-    setCurrentPage(page) {
-      this.currentPage = page;
-    },
-    resetCurrentPage() {
-      this.setCurrentPage(1);
-    }
-  },
+  }
 }
 </script>
 
