@@ -86,9 +86,9 @@ export default {
       filterKey.value = currentType;
     }
 
-    onMounted(() => setTimeout(filtered, 500));
+    onMounted(filtered);
 
-    watch(filterKey, filtered)
+    watch([filterKey, specificationData], filtered)
 
     return {
       specification,
