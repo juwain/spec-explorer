@@ -51,6 +51,7 @@ import { SORT_ORDER, SORT_KEYS } from '../service/enums.js';
 import useSpecifications from '../composables/useSpecifications.js';
 import useDataFilter from '../composables/useDataFilter.js';
 import useDataSlicer from '../composables/useDataSlicer.js';
+import computedSpecificationsOrgs from '../composables/computedSpecificationsOrgs.js';
 
 export default {
   name: 'Explorer',
@@ -66,6 +67,8 @@ export default {
       specifications,
       getSpecifications
     } = useSpecifications();
+
+    const { specificationsOrgs } = computedSpecificationsOrgs(specifications);
 
     const {
       filteredData,
@@ -83,6 +86,7 @@ export default {
     return {
       specifications,
       getSpecifications,
+      specificationsOrgs,
       slicedSpecifications: slicedData,
       onPaginationClick: sliceHandler,
       resetPagination,
@@ -104,17 +108,6 @@ export default {
     }
   },
   computed: {
-    specificationsOrgs() {
-      return this.specifications.reduce((acc, value) => {
-        const organization = value.organization;
-
-        if (!acc.includes(organization)) {
-          acc.push(organization);
-        }
-
-        return acc;
-      }, []).sort();
-    },
     // filteredSpecifications() {
     //   let filtered = this.specifications;
 
