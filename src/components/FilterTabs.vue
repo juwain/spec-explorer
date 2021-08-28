@@ -29,7 +29,7 @@ export default {
   methods: {
     activateFilter(filter) {
       this.currentTab = (this.currentTab === filter) ? '': filter;
-      this.onBeforeClickHandler() ? this.onBeforeClickHandler() : () => {};
+      this.onBeforeClickHandler ? this.onBeforeClickHandler() : () => {};
       this.onClickHandler(this.currentTab);
     }
   }

@@ -3,6 +3,7 @@
     <div class="specifications-filter">
       <FilterTabs
         :tabs="specificationsOrgs"
+        :onBeforeClickHandler="resetPagination"
         :onClickHandler="onTabClick"
       />
 
@@ -49,6 +50,7 @@ import { sortByAlphabet, sortByDate } from '../service/sortingFunctions.js';
 import { SORT_ORDER, SORT_KEYS } from '../service/enums.js';
 import useSpecifications from '../composables/useSpecifications.js';
 import useDataFilter from '../composables/useDataFilter.js';
+import useDataSlicer from '../composables/useDataSlicer.js';
 
 export default {
   name: 'Explorer',
@@ -70,9 +72,22 @@ export default {
       filterHandler
     } = useDataFilter(specifications, 'organization');
 
+    const {
+      slicedData,
+      sliceHandler,
+      resetPagination,
+      pageSize,
+      currentPage
+    } = useDataSlicer(filteredData);
+
     return {
       specifications,
       getSpecifications,
+      slicedSpecifications: slicedData,
+      onPaginationClick: sliceHandler,
+      resetPagination,
+      pageSize,
+      currentPage,
       filteredSpecifications: filteredData,
       onTabClick: filterHandler,
     }
@@ -82,8 +97,6 @@ export default {
       sortingKey: '',
       sortingMode: '',
       searchQuery: '',
-      pageSize: 20,
-      currentPage: 1,
       sortings: {
         [SORT_KEYS.ALPHABET]: { text: 'by alphabet', fn: sortByAlphabet },
         [SORT_KEYS.DATE]: { text: 'by date', fn: sortByDate }
@@ -132,12 +145,6 @@ export default {
 
       return sorted;
     },
-    slicedSpecifications() {
-      const startIndex = this.currentPage * this.pageSize - this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-
-      return this.sortedSpecifications.slice(startIndex, endIndex);
-    }
   },
   methods: {
     onSortingClick(sorting, mode) {
