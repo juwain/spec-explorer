@@ -12,6 +12,7 @@
 
     <FilterTabs
       :tabs="dfnsTypes"
+      :onBeforeClickHandler="resetPagination"
       :onClickHandler="onTabClick"
       class="specification-filter"
     />

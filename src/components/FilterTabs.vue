@@ -18,7 +18,8 @@ export default {
   name: 'FilterTabs',
   props: {
     tabs: Array,
-    onClickHandler: Function
+    onClickHandler: Function,
+    onBeforeClickHandler: Function
   },
   data() {
     return {
@@ -28,6 +29,7 @@ export default {
   methods: {
     activateFilter(filter) {
       this.currentTab = (this.currentTab === filter) ? '': filter;
+      this.onBeforeClickHandler();
       this.onClickHandler(this.currentTab);
     }
   }
