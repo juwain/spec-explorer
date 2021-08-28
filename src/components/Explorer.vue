@@ -48,6 +48,7 @@ import Pagination from './Pagination.vue';
 import { sortByAlphabet, sortByDate } from '../service/sortingFunctions.js';
 import { SORT_ORDER, SORT_KEYS } from '../service/enums.js';
 import useSpecifications from '../composables/useSpecifications.js';
+import useDataFilter from '../composables/useDataFilter.js';
 
 export default {
   name: 'Explorer',
@@ -64,14 +65,20 @@ export default {
       getSpecifications
     } = useSpecifications();
 
+    const {
+      filteredData,
+      filterHandler
+    } = useDataFilter(specifications, 'organization');
+
     return {
       specifications,
-      getSpecifications
+      getSpecifications,
+      filteredSpecifications: filteredData,
+      onTabClick: filterHandler,
     }
   },
   data() {
     return  {
-      filterKey: '',
       sortingKey: '',
       sortingMode: '',
       searchQuery: '',
@@ -95,23 +102,23 @@ export default {
         return acc;
       }, []).sort();
     },
-    filteredSpecifications() {
-      let filtered = this.specifications;
+    // filteredSpecifications() {
+    //   let filtered = this.specifications;
 
-      if (this.filterKey.length > 0) {
-        filtered = this.specifications.filter((item) => {
-          return item.organization === this.filterKey;
-        })
-      }
+    //   if (this.filterKey.length > 0) {
+    //     filtered = this.specifications.filter((item) => {
+    //       return item.organization === this.filterKey;
+    //     })
+    //   }
 
-      if (this.searchQuery.trim().length > 0) {
-        filtered = filtered.filter((item) => {
-          return item.title.toLowerCase().includes(this.searchQuery);
-        })
-      }
+    //   if (this.searchQuery.trim().length > 0) {
+    //     filtered = filtered.filter((item) => {
+    //       return item.title.toLowerCase().includes(this.searchQuery);
+    //     })
+    //   }
 
-      return filtered;
-    },
+    //   return filtered;
+    // },
     sortedSpecifications() {
       let sorted = this.filteredSpecifications;
 
@@ -133,10 +140,6 @@ export default {
     }
   },
   methods: {
-    onTabClick(filter) {
-      this.resetCurrentPage();
-      this.filterKey = filter;
-    },
     onSortingClick(sorting, mode) {
       this.resetCurrentPage();
       this.sortingKey = sorting;

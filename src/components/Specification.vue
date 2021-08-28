@@ -77,7 +77,7 @@ export default {
     const {
       filteredData,
       filterHandler
-    } = useDataFilter(specificationData);
+    } = useDataFilter(specificationData, 'type');
 
     const {
       slicedData,

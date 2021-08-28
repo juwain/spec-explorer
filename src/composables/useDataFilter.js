@@ -1,6 +1,6 @@
 import { ref, onMounted, watch } from 'vue';
 
-export default function useDataFilter(data) {
+export default function useDataFilter(data, key) {
   const filterKey = ref('');
   const filteredData = ref([]);
 
@@ -9,7 +9,7 @@ export default function useDataFilter(data) {
 
     if (filterKey.value.length > 0) {
       result = result.filter(item => {
-        return item.type === filterKey.value;
+        return item[key] === filterKey.value;
       })
     }
 
