@@ -22,7 +22,7 @@ export default function useDataFilter(data, key) {
 
   onMounted(filterData);
 
-  watch([filterKey, data], filterData)
+  watch([filterKey, data], filterData);
 
   return {
     filteredData,

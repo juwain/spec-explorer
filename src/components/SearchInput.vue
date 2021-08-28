@@ -14,10 +14,12 @@
 export default {
   name: 'SearchInput',
   props: {
-    onInputHandler: Function
+    onInputHandler: Function,
+    onBeforeInputHandler: Function
   },
   methods: {
     activateSearch(event) {
+      this.onBeforeInputHandler ? this.onBeforeInputHandler() : () => {};
       this.onInputHandler(event.target.value);
     }
   }

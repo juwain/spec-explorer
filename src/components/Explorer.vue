@@ -8,6 +8,7 @@
       />
 
       <SearchInput
+        :onBeforeInputHandler="resetPagination"
         :onInputHandler="onSearchInput"
       />
     </div>
@@ -50,6 +51,7 @@ import { sortByAlphabet, sortByDate } from '../service/sortingFunctions.js';
 import { SORT_ORDER, SORT_KEYS } from '../service/enums.js';
 import useSpecifications from '../composables/useSpecifications.js';
 import useDataFilter from '../composables/useDataFilter.js';
+import useDataSearch from '../composables/useDataSearch.js';
 import useDataSlicer from '../composables/useDataSlicer.js';
 import computedSpecificationsOrgs from '../composables/computedSpecificationsOrgs.js';
 
@@ -76,12 +78,17 @@ export default {
     } = useDataFilter(specifications, 'organization');
 
     const {
+      searchedData,
+      searchHandler
+    } = useDataSearch(filteredData, 'title');
+
+    const {
       slicedData,
       sliceHandler,
       resetPagination,
       pageSize,
       currentPage
-    } = useDataSlicer(filteredData);
+    } = useDataSlicer(searchedData);
 
     return {
       specifications,
@@ -92,15 +99,15 @@ export default {
       resetPagination,
       pageSize,
       currentPage,
-      filteredSpecifications: filteredData,
       onTabClick: filterHandler,
+      filteredSpecifications: searchedData,
+      onSearchInput: searchHandler,
     }
   },
   data() {
     return  {
       sortingKey: '',
       sortingMode: '',
-      searchQuery: '',
       sortings: {
         [SORT_KEYS.ALPHABET]: { text: 'by alphabet', fn: sortByAlphabet },
         [SORT_KEYS.DATE]: { text: 'by date', fn: sortByDate }
@@ -108,23 +115,6 @@ export default {
     }
   },
   computed: {
-    // filteredSpecifications() {
-    //   let filtered = this.specifications;
-
-    //   if (this.filterKey.length > 0) {
-    //     filtered = this.specifications.filter((item) => {
-    //       return item.organization === this.filterKey;
-    //     })
-    //   }
-
-    //   if (this.searchQuery.trim().length > 0) {
-    //     filtered = filtered.filter((item) => {
-    //       return item.title.toLowerCase().includes(this.searchQuery);
-    //     })
-    //   }
-
-    //   return filtered;
-    // },
     sortedSpecifications() {
       let sorted = this.filteredSpecifications;
 
@@ -144,10 +134,6 @@ export default {
       this.resetCurrentPage();
       this.sortingKey = sorting;
       this.sortingMode = mode;
-    },
-    onSearchInput(query) {
-      this.resetCurrentPage();
-      this.searchQuery = query.toLowerCase();
     },
     setCurrentPage(page) {
       this.currentPage = page;
