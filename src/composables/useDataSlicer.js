@@ -22,7 +22,11 @@ export default function useDataSlicer(data) {
 
   onMounted(sliceData);
 
-  watch([data, currentPage], sliceData);
+  watch([data, currentPage], (prev, next) => {
+    console.log('prev', prev);
+    console.log('next', next);
+    sliceData();
+  });
 
   return {
     slicedData,

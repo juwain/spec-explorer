@@ -18,7 +18,7 @@
       :pageSize="pageSize"
       :currentPage="currentPage"
       :count="filteredSpecifications.length"
-      :onClickHandler="setCurrentPage"
+      :onClickHandler="onPaginationClick"
       class="specifications-pagination"
     />
 
@@ -48,11 +48,12 @@ import Sorting from './Sorting.vue';
 import SearchInput from './SearchInput.vue';
 import Pagination from './Pagination.vue';
 import { sortByAlphabet, sortByDate } from '../service/sortingFunctions.js';
-import { SORT_ORDER, SORT_KEYS } from '../service/enums.js';
+import { SORT_KEYS } from '../service/enums.js';
 import useSpecifications from '../composables/useSpecifications.js';
 import useDataFilter from '../composables/useDataFilter.js';
 import useDataSearch from '../composables/useDataSearch.js';
 import useDataSlicer from '../composables/useDataSlicer.js';
+import useDataSorter from '../composables/useDataSorter.js';
 import computedSpecificationsOrgs from '../composables/computedSpecificationsOrgs.js';
 
 export default {
@@ -70,6 +71,10 @@ export default {
       getSpecifications
     } = useSpecifications();
 
+    const sortings = {
+      [SORT_KEYS.ALPHABET]: { text: 'by alphabet', fn: sortByAlphabet },
+      [SORT_KEYS.DATE]: { text: 'by date', fn: sortByDate }
+    }
     const { specificationsOrgs } = computedSpecificationsOrgs(specifications);
 
     const {
@@ -83,12 +88,17 @@ export default {
     } = useDataSearch(filteredData, 'title');
 
     const {
+      sortedData,
+      sortHandler
+    } = useDataSorter(searchedData, sortings);
+
+    const {
       slicedData,
       sliceHandler,
       resetPagination,
       pageSize,
       currentPage
-    } = useDataSlicer(searchedData);
+    } = useDataSlicer(sortedData);
 
     return {
       specifications,
@@ -102,46 +112,10 @@ export default {
       onTabClick: filterHandler,
       filteredSpecifications: searchedData,
       onSearchInput: searchHandler,
+      onSortingClick: sortHandler,
+      sortings
     }
   },
-  data() {
-    return  {
-      sortingKey: '',
-      sortingMode: '',
-      sortings: {
-        [SORT_KEYS.ALPHABET]: { text: 'by alphabet', fn: sortByAlphabet },
-        [SORT_KEYS.DATE]: { text: 'by date', fn: sortByDate }
-      }
-    }
-  },
-  computed: {
-    sortedSpecifications() {
-      let sorted = this.filteredSpecifications;
-
-      if (this.sortingKey !== '') {
-        sorted = sorted.sort(this.sortings[this.sortingKey].fn);
-
-        if (this.sortingMode === SORT_ORDER.DESC) {
-          sorted = sorted.reverse();
-        }
-      }
-
-      return sorted;
-    },
-  },
-  methods: {
-    onSortingClick(sorting, mode) {
-      this.resetCurrentPage();
-      this.sortingKey = sorting;
-      this.sortingMode = mode;
-    },
-    setCurrentPage(page) {
-      this.currentPage = page;
-    },
-    resetCurrentPage() {
-      this.setCurrentPage(1);
-    },
-  }
 }
 </script>
 
