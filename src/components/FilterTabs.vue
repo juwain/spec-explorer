@@ -13,24 +13,37 @@
 </template>
 
 <script>
+import { ref, toRefs } from 'vue';
 
 export default {
   name: 'FilterTabs',
   props: {
-    tabs: Array,
-    onClickHandler: Function,
-    onBeforeClickHandler: Function
-  },
-  data() {
-    return {
-      currentTab: ''
+    tabs: {
+      type: Array,
+      required: true
+    },
+    onClickHandler: {
+      type: Function,
+      required: true
+    },
+    onBeforeClickHandler: {
+      type: Function,
+      required: false
     }
   },
-  methods: {
-    activateFilter(filter) {
-      this.currentTab = (this.currentTab === filter) ? '': filter;
-      this.onBeforeClickHandler ? this.onBeforeClickHandler() : () => {};
-      this.onClickHandler(this.currentTab);
+  setup(props) {
+    const { onClickHandler, onBeforeClickHandler } = toRefs(props);
+    const currentTab = ref('');
+
+    const activateFilter = (filter) => {
+      currentTab.value = (currentTab.value === filter) ? '': filter;
+      onBeforeClickHandler.value ? onBeforeClickHandler.value() : () => {};
+      onClickHandler.value(currentTab.value);
+    }
+
+    return {
+      activateFilter,
+      currentTab
     }
   }
 }
