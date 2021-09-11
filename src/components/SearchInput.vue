@@ -10,17 +10,30 @@
 </template>
 
 <script>
+import { toRefs } from 'vue';
 
 export default {
   name: 'SearchInput',
   props: {
-    onInputHandler: Function,
-    onBeforeInputHandler: Function
+    onInputHandler: {
+      type: Function,
+      required: true
+    },
+    onBeforeInputHandler: {
+      type: Function,
+      required: false
+    }
   },
-  methods: {
-    activateSearch(event) {
-      this.onBeforeInputHandler ? this.onBeforeInputHandler() : () => {};
-      this.onInputHandler(event.target.value);
+  setup(props) {
+    const { onBeforeInputHandler, onInputHandler } = toRefs(props);
+
+    const activateSearch = (event) => {
+      onBeforeInputHandler.value ? onBeforeInputHandler.value() : () => {};
+      onInputHandler.value(event.target.value);
+    }
+
+    return {
+      activateSearch
     }
   }
 }
