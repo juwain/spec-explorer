@@ -17,29 +17,48 @@
 </template>
 
 <script>
+import { toRefs } from 'vue';
+
 export default {
   name: 'Pagination',
   props: {
-    pageSize: Number,
-    currentPage: Number,
-    count: Number,
-    onClickHandler: Function
-  },
-  data() {
-    return {
-      pageIndex: this.currentPage,
-      maxSteps: 5
-    }
-  },
-  methods: {
-    paginate(index) {
-      const page = this.getNormalizedIndex(index);
-      this.onClickHandler(page);
+    pageSize: {
+      type: Number,
+      required: true
     },
-    getNormalizedIndex(index) {
-      return index / this.pageSize + 1;
+    currentPage: {
+      type: Number,
+      required: true
+    },
+    count: {
+      type: Number,
+      required: true
+    },
+    onClickHandler: {
+      type: Function,
+      required: true
     }
-  }
+  },
+  setup(props) {
+    const { pageSize, onClickHandler, currentPage } = toRefs(props);
+
+    const pageIndex = currentPage.value;
+
+    const getNormalizedIndex = (index) => {
+      return index / pageSize.value + 1;
+    }
+
+    const paginate = (index) => {
+      const page = getNormalizedIndex(index);
+      onClickHandler.value(page);
+    }
+
+    return {
+      paginate,
+      getNormalizedIndex,
+      pageIndex
+    }
+  },
 }
 </script>
 
