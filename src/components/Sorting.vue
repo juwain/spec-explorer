@@ -18,32 +18,44 @@
 
 <script>
 import { SORT_ORDER } from '../service/enums.js';
+import { ref, toRefs } from 'vue';
 
 export default {
   name: 'Sorting',
   props: {
-    sortings: Object,
-    onClickHandler: Function
-  },
-  data() {
-    return {
-      currentSorting: '',
-      currentMode: SORT_ORDER.ASC
+    sortings: {
+      type: Object,
+      required: true
+    },
+    onClickHandler: {
+      type: Function,
+      required: true
     }
   },
-  methods: {
-    activateSorting(sorting) {
-      this.currentMode === SORT_ORDER.ASC;
+  setup(props) {
+    const { onClickHandler } = toRefs(props);
 
-      if (this.currentSorting === sorting) {
-        this.currentMode = (this.currentMode === SORT_ORDER.ASC) ?
+    const currentSorting = ref('');
+    const currentMode = ref(SORT_ORDER.ASC);
+
+    const activateSorting = (sorting) => {
+      currentMode.value === SORT_ORDER.ASC;
+
+      if (currentSorting.value === sorting) {
+        currentMode.value = (currentMode.value === SORT_ORDER.ASC) ?
           SORT_ORDER.DESC : SORT_ORDER.ASC;
       }
 
-      this.currentSorting = sorting;
+      currentSorting.value = sorting;
 
-      this.onClickHandler(this.currentSorting, this.currentMode);
+      onClickHandler.value(currentSorting.value, currentMode.value);
     }
+
+     return {
+       activateSorting,
+       currentSorting,
+       currentMode
+     }
   }
 }
 </script>
