@@ -18,7 +18,10 @@
 export default {
   name: 'SpecificationDetails',
   props: {
-    data: Object
+    data: {
+      type: Object,
+      required: true
+    }
   }
 }
 </script>

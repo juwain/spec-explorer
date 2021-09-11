@@ -29,7 +29,10 @@
 export default {
   name: 'SpecificationCard',
   props: {
-    data: Object
+    data: {
+      type: Object,
+      required: true
+    }
   }
 }
 </script>
