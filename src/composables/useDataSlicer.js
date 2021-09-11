@@ -22,9 +22,7 @@ export default function useDataSlicer(data) {
 
   onMounted(sliceData);
 
-  watch([data, pageSize, currentPage], sliceData, {
-    deep: true,
-  });
+  watch([data, pageSize, currentPage], sliceData);
 
   return {
     slicedData,

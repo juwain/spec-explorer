@@ -7,7 +7,7 @@ export default function useDataSorter(data, sortings) {
   const sortedData = ref([]);
 
   const sortData = () => {
-    let result = data.value;
+    let result = [...data.value];
 
     if (sortingKey.value !== '') {
       result = result.sort(sortings[sortingKey.value].fn);
