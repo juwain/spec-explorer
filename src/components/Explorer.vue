@@ -47,8 +47,7 @@ import FilterTabs from './FilterTabs.vue';
 import Sorting from './Sorting.vue';
 import SearchInput from './SearchInput.vue';
 import Pagination from './Pagination.vue';
-import { sortByAlphabet, sortByDate } from '../service/sortingFunctions.js';
-import { SORT_KEYS } from '../service/enums.js';
+import { sortings } from '../service/sortings.js';
 import useSpecifications from '../composables/useSpecifications.js';
 import useDataFilter from '../composables/useDataFilter.js';
 import useDataSearch from '../composables/useDataSearch.js';
@@ -71,10 +70,6 @@ export default {
       getSpecifications
     } = useSpecifications();
 
-    const sortings = {
-      [SORT_KEYS.ALPHABET]: { text: 'by alphabet', fn: sortByAlphabet },
-      [SORT_KEYS.DATE]: { text: 'by date', fn: sortByDate }
-    }
     const { specificationsOrgs } = computedSpecificationsOrgs(specifications);
 
     const {

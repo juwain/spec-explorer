@@ -22,10 +22,8 @@ export default function useDataSlicer(data) {
 
   onMounted(sliceData);
 
-  watch([data, currentPage], (prev, next) => {
-    console.log('prev', prev);
-    console.log('next', next);
-    sliceData();
+  watch([data, pageSize, currentPage], sliceData, {
+    deep: true,
   });
 
   return {
