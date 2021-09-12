@@ -10,12 +10,20 @@
       </a>
     </h1>
 
-    <FilterTabs
-      :tabs="dfnsTypes"
-      :onBeforeClickHandler="resetPagination"
-      :onClickHandler="onTabClick"
-      class="specification-filter"
-    />
+    <div class="specification-filters">
+      <FilterTabs
+        :tabs="dfnsTypes"
+        :onBeforeClickHandler="resetPagination"
+        :onClickHandler="onTabClick"
+        class="specification-filter"
+      />
+
+      <SearchInput
+        :onBeforeInputHandler="resetPagination"
+        :onInputHandler="onSearchInput"
+      />
+    </div>
+
 
     <Pagination
       v-if="filteredDfns.length > pageSize"
@@ -44,9 +52,11 @@
 import FilterTabs from './FilterTabs.vue';
 import SpecificationDetails from './SpecificationDetails.vue';
 import Pagination from './Pagination.vue';
+import SearchInput from './SearchInput.vue';
 import { toRefs } from 'vue';
 import useSpecificationData from '../composables/useSpecificationData.js';
 import useDataFilter from '../composables/useDataFilter.js';
+import useDataSearch from '../composables/useDataSearch.js';
 import useDataSlicer from '../composables/useDataSlicer.js';
 import computedSpecificationDfnTypes from '../composables/computedSpecificationDfnTypes.js';
 
@@ -61,7 +71,8 @@ export default {
   components: {
     FilterTabs,
     SpecificationDetails,
-    Pagination
+    Pagination,
+    SearchInput
   },
   setup (props) {
     const { id } = toRefs(props);
@@ -80,12 +91,17 @@ export default {
     } = useDataFilter(specificationData, 'type');
 
     const {
+      searchedData,
+      searchHandler
+    } = useDataSearch(filteredData, 'id');
+
+    const {
       slicedData,
       sliceHandler,
       resetPagination,
       pageSize,
       currentPage
-    } = useDataSlicer(filteredData);
+    } = useDataSlicer(searchedData);
 
     return {
       specification,
@@ -97,7 +113,8 @@ export default {
       resetPagination,
       pageSize,
       currentPage,
-      filteredDfns: filteredData,
+      filteredDfns: searchedData,
+      onSearchInput: searchHandler,
       onTabClick: filterHandler,
     }
   }
@@ -105,10 +122,16 @@ export default {
 </script>
 
 <style scoped>
+.specification-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-block-end: 20px;
+}
+
 .specification-filter {
   display: flex;
   flex-wrap: wrap;
-  margin-block-end: 20px;
 }
 
 .specification-pagination {
