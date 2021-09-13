@@ -39,6 +39,8 @@
         v-for="dfn in slicedDfns"
         :key="dfn.id"
         :data="dfn"
+        :onFavouritesClick="isFavourited(dfn.id) ? () => removeFromFavourites(dfn) : () => addToFavourites(dfn)"
+        :favouritesButtonText="isFavourited(dfn.id) ? 'remove from fav' : 'add to fav'"
         class="specification-dfn"
       />
     </div>
@@ -59,6 +61,7 @@ import useDataFilter from '../composables/useDataFilter.js';
 import useDataSearch from '../composables/useDataSearch.js';
 import useDataSlicer from '../composables/useDataSlicer.js';
 import computedSpecificationDfnTypes from '../composables/computedSpecificationDfnTypes.js';
+import { useStore } from 'vuex';
 
 export default {
   name: 'Specification',
@@ -76,6 +79,7 @@ export default {
   },
   setup (props) {
     const { id } = toRefs(props);
+    const store = useStore();
 
     const {
       specification,
@@ -116,6 +120,9 @@ export default {
       filteredDfns: searchedData,
       onSearchInput: searchHandler,
       onTabClick: filterHandler,
+      isFavourited: (id) => store.getters.isFavourited(id),
+      addToFavourites: (dfn) => store.dispatch('addToFavourites', dfn),
+      removeFromFavourites: (dfn) => store.dispatch('removeFromFavourites', dfn),
     }
   }
 }
