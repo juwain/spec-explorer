@@ -48,12 +48,12 @@ import Sorting from './Sorting.vue';
 import SearchInput from './SearchInput.vue';
 import Pagination from './Pagination.vue';
 import { sortings } from '../service/sortings.js';
-import useSpecifications from '../composables/useSpecifications.js';
-import useDataFilter from '../composables/useDataFilter.js';
-import useDataSearch from '../composables/useDataSearch.js';
-import useDataSlicer from '../composables/useDataSlicer.js';
-import useDataSorter from '../composables/useDataSorter.js';
-import computedSpecificationsOrgs from '../composables/computedSpecificationsOrgs.js';
+import useSpecifications from '../composables/hooks/useSpecifications.js';
+import useDataFilter from '../composables/hooks/useDataFilter.js';
+import useDataSearch from '../composables/hooks/useDataSearch.js';
+import useDataSlicer from '../composables/hooks/useDataSlicer.js';
+import useDataSorter from '../composables/hooks/useDataSorter.js';
+import computedSpecificationsOrgs from '../composables/computed/computedSpecificationsOrgs.js';
 
 export default {
   name: 'Explorer',

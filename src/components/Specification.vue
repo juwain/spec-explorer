@@ -56,11 +56,11 @@ import SpecificationDetails from './SpecificationDetails.vue';
 import Pagination from './Pagination.vue';
 import SearchInput from './SearchInput.vue';
 import { toRefs } from 'vue';
-import useSpecificationData from '../composables/useSpecificationData.js';
-import useDataFilter from '../composables/useDataFilter.js';
-import useDataSearch from '../composables/useDataSearch.js';
-import useDataSlicer from '../composables/useDataSlicer.js';
-import computedSpecificationDfnTypes from '../composables/computedSpecificationDfnTypes.js';
+import useSpecificationData from '../composables/hooks/useSpecificationData.js';
+import useDataFilter from '../composables/hooks/useDataFilter.js';
+import useDataSearch from '../composables/hooks/useDataSearch.js';
+import useDataSlicer from '../composables/hooks/useDataSlicer.js';
+import computedSpecificationDfnTypes from '../composables/computed/computedSpecificationDfnTypes.js';
 import { useStore } from 'vuex';
 
 export default {

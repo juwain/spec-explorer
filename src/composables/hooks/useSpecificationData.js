@@ -1,5 +1,5 @@
 import { ref, onMounted, watch } from 'vue';
-import {specURL} from '../service/constants.js';
+import { specURL } from '../../service/constants.js';
 
 export default function useSpecificationData(id) {
   let specification = ref({});

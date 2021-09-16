@@ -1,5 +1,5 @@
 import { ref, onMounted } from 'vue';
-import { indexURL } from '../service/constants.js';
+import { indexURL } from '../../service/constants.js';
 
 export default function useSpecifications() {
   let specifications = ref([]);

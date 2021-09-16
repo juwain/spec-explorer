@@ -1,5 +1,5 @@
 import { ref, onMounted, watch } from 'vue';
-import { SORT_ORDER } from '../service/enums.js';
+import { SORT_ORDER } from '../../service/enums.js';
 
 export default function useDataSorter(data, sortings) {
   const sortingKey = ref('');
