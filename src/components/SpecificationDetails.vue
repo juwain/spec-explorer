@@ -5,9 +5,10 @@
       <a :href="data.href">↗</a>
     </h3>
     <button
-    class="dfn-favourite"
-    type="button"
-    @click="onFavouritesClick">
+      class="dfn-favourite"
+      type="button"
+      @click="onFavouritesClick"
+    >
       <svg
         :class="['dfn-favourite-star', { active: isFavourited }]"
         viewBox="0 0 24 30"
