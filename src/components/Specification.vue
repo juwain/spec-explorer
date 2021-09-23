@@ -40,7 +40,7 @@
         :key="dfn.id"
         :data="dfn"
         :onFavouritesClick="isFavourited(dfn.id) ? () => removeFromFavourites(dfn) : () => addToFavourites(dfn)"
-        :favouritesButtonText="isFavourited(dfn.id) ? 'remove from fav' : 'add to fav'"
+        :isFavourited="isFavourited(dfn.id)"
         class="specification-dfn"
       />
     </div>
