@@ -1,4 +1,11 @@
-import { createStore } from 'vuex';
+// import { createStore } from 'vuex';
+import Vuex from 'vuex';
+import VuexPersistence from 'vuex-persist';
+
+const vuexLocal = new VuexPersistence({
+  key: 'spec-explorer',
+  storage: window.localStorage,
+});
 
 const state = {
   favourites: []
@@ -31,9 +38,12 @@ const getters = {
   }
 }
 
-export default createStore({
+const store = new Vuex.Store({
+  plugins: [vuexLocal.plugin],
   state,
   getters,
   actions,
   mutations
-})
+});
+
+export default store;
