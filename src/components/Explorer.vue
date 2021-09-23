@@ -1,6 +1,10 @@
 <template>
   <div v-if="specifications.length > 0">
-    <div class="specifications-filter">
+    <nav class="main-nav">
+      <router-link to="/favourites">Favourites</router-link>
+    </nav>
+
+    <section class="specifications-filter">
       <FilterTabs
         :tabs="specificationsOrgs"
         :onBeforeClickHandler="resetPagination"
@@ -11,7 +15,7 @@
         :onBeforeInputHandler="resetPagination"
         :onInputHandler="onSearchInput"
       />
-    </div>
+    </section>
 
     <Pagination
       v-if="filteredSpecifications.length > pageSize"
@@ -28,13 +32,13 @@
       class="specifications-sorting"
     />
 
-    <div class="specifications-grid">
+    <section class="specifications-grid">
       <SpecificationCard
         v-for="specification in slicedSpecifications"
         :key="specification.url"
         :data="specification"
       />
-    </div>
+    </section>
   </div>
   <div v-else>
     Loading…
