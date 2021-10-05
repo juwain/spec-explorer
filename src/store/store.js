@@ -35,6 +35,9 @@ const actions = {
 const getters = {
   isFavourited: (state) => (id) => {
     return state.favourites.some((item) => item.id === id);
+  },
+  favourites: (state) => {
+    return state.favourites;
   }
 }
 

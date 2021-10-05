@@ -119,6 +119,10 @@ export default {
 </script>
 
 <style scoped>
+.main-nav {
+  margin: 10px 0;
+}
+
 .specifications-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));

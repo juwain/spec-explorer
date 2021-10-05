@@ -2,21 +2,19 @@
   <div class="container">
     <router-link to="/">⬅ Back</router-link>
 
-    <!-- <Specification :id="$route.params.id" /> -->
-
-    Favourites
+    <Favourites />
 
   </div>
 </template>
 
 <script>
-// import Specification from '../components/Specification.vue';
+import Favourites from '../components/Favourites.vue';
 
 export default {
   name: 'Inner',
-  // components: {
-  //   Specification
-  // }
+  components: {
+    Favourites
+  }
 }
 </script>
 
