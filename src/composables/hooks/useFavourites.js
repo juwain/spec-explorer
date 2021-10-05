@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 
 export default function useFavourites() {
@@ -15,6 +15,7 @@ export default function useFavourites() {
   const removeFromFavourites = (dfn) => store.dispatch('removeFromFavourites', dfn);
 
   onMounted(getFavouritesData);
+  watch(store.state, getFavouritesData);
 
   return {
     favouritesData,
