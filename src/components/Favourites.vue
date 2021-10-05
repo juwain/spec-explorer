@@ -29,14 +29,16 @@
     />
 
     <div class="specification-dfns">
-      <SpecificationDetails
-        v-for="dfn in slicedDfns"
-        :key="dfn.id"
-        :data="dfn"
-        :onFavouritesClick="isFavourited(dfn.id) ? () => removeFromFavourites(dfn) : () => addToFavourites(dfn)"
-        :isFavourited="isFavourited(dfn.id)"
-        class="specification-dfn"
-      />
+      <transition-group name="specification-dfn">
+        <SpecificationDetails
+          v-for="dfn in slicedDfns"
+          :key="dfn.id"
+          :data="dfn"
+          :onFavouritesClick="isFavourited(dfn.id) ? () => removeFromFavourites(dfn) : () => addToFavourites(dfn)"
+          :isFavourited="isFavourited(dfn.id)"
+          class="specification-dfn"
+        />
+      </transition-group>
     </div>
   </div>
   <div v-else>
@@ -130,4 +132,13 @@ export default {
 .specification-dfn {
   border-bottom: 1px solid #f0f0f0;
 }
+
+.specification-dfn-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.specification-dfn-leave-to {
+  opacity: 0;
+}
+
 </style>
