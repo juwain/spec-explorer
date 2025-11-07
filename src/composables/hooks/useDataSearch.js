@@ -1,7 +1,7 @@
 import { ref, onMounted, watch } from 'vue';
 
-export default function useDataSearch(data, key) {
-  const searchQuery = ref('');
+export default function useDataSearch(data, key, initialSearch = '') {
+  const searchQuery = ref(initialSearch);
   const searchedData = ref([]);
 
   const searchData = () => {
@@ -25,6 +25,7 @@ export default function useDataSearch(data, key) {
   watch([searchQuery, data], searchData);
 
   return {
+    searchQuery,
     searchedData,
     searchHandler
   }

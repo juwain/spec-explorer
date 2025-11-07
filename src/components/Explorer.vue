@@ -1,7 +1,7 @@
 <template>
   <div v-if="specifications.length > 0">
     <nav class="main-nav">
-      <router-link to="/favourites">Favourites</router-link>
+      <router-link :to="{ path: '/favourites', query: $route.query }">Favourites</router-link>
     </nav>
 
     <section class="specifications-filter">
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { watch } from 'vue';
 import SpecificationCard from './SpecificationCard.vue';
 import FilterTabs from './FilterTabs.vue';
 import Sorting from './Sorting.vue';
@@ -57,6 +58,7 @@ import useDataFilter from '../composables/hooks/useDataFilter.js';
 import useDataSearch from '../composables/hooks/useDataSearch.js';
 import useDataSlicer from '../composables/hooks/useDataSlicer.js';
 import useDataSorter from '../composables/hooks/useDataSorter.js';
+import useURLState from '../composables/hooks/useURLState.js';
 import computedSpecificationsOrgs from '../composables/computed/computedSpecificationsOrgs.js';
 
 export default {
@@ -76,42 +78,116 @@ export default {
 
     const { specificationsOrgs } = computedSpecificationsOrgs(specifications);
 
+    // URL state management with defaults
+    const {
+      filter: filterKey,
+      search: searchQuery,
+      sort: sortingKey,
+      order: sortingMode,
+      page: currentPage
+    } = useURLState({
+      filter: '',
+      search: '',
+      sort: '',
+      order: '',
+      page: '1'
+    });
+
     const {
       filteredData,
-      filterHandler
-    } = useDataFilter(specifications, 'organization');
+      filterHandler,
+      filterKey: internalFilterKey
+    } = useDataFilter(specifications, 'organization', filterKey.value);
 
     const {
       searchedData,
-      searchHandler
-    } = useDataSearch(filteredData, 'title');
+      searchHandler,
+      searchQuery: internalSearchQuery
+    } = useDataSearch(filteredData, 'title', searchQuery.value);
 
     const {
       sortedData,
-      sortHandler
-    } = useDataSorter(searchedData, sortings);
+      sortHandler,
+      sortingKey: internalSortingKey,
+      sortingMode: internalSortingMode
+    } = useDataSorter(searchedData, sortings, sortingKey.value, sortingMode.value);
 
     const {
       slicedData,
       sliceHandler,
       resetPagination,
       pageSize,
-      currentPage
-    } = useDataSlicer(sortedData);
+      currentPage: internalCurrentPage
+    } = useDataSlicer(sortedData, parseInt(currentPage.value) || 1);
+
+    // Keep composable states in sync with URL state
+    watch(filterKey, (newValue) => {
+      if (internalFilterKey.value !== newValue) {
+        filterHandler(newValue);
+      }
+    });
+
+    watch(searchQuery, (newValue) => {
+      if (internalSearchQuery.value !== newValue) {
+        searchHandler(newValue);
+      }
+    });
+
+    watch([sortingKey, sortingMode], ([newSort, newOrder]) => {
+      if (internalSortingKey.value !== newSort || internalSortingMode.value !== newOrder) {
+        sortHandler(newSort, newOrder);
+      }
+    });
+
+    watch(currentPage, (newPage) => {
+      const pageNum = parseInt(newPage);
+      if (internalCurrentPage.value !== pageNum) {
+        sliceHandler(pageNum);
+      }
+    });
+
+    // Create wrappers for handlers that update URL state
+    const handleFilter = (value) => {
+      filterHandler(value);
+      filterKey.value = value;
+      currentPage.value = '1'; // Reset page when filtering
+    };
+
+    const handleSearch = (value) => {
+      searchHandler(value);
+      searchQuery.value = value;
+      currentPage.value = '1'; // Reset page when searching
+    };
+
+    const handleSort = (sort, mode) => {
+      sortHandler(sort, mode);
+      sortingKey.value = sort;
+      sortingMode.value = mode;
+    };
+
+    const handlePage = (page) => {
+      sliceHandler(page);
+      currentPage.value = String(page);
+    };
+
+    const handleResetPagination = () => {
+      resetPagination();
+      currentPage.value = '1';
+    };
 
     return {
       specifications,
       getSpecifications,
       specificationsOrgs,
       slicedSpecifications: slicedData,
-      onPaginationClick: sliceHandler,
-      resetPagination,
+      onPaginationClick: handlePage,
+      resetPagination: handleResetPagination,
       pageSize,
-      currentPage,
-      onTabClick: filterHandler,
+      currentPage: internalCurrentPage,
+      onTabClick: handleFilter,
       filteredSpecifications: searchedData,
-      onSearchInput: searchHandler,
-      onSortingClick: sortHandler,
+      onSearchInput: handleSearch,
+      onSortingClick: handleSort,
       sortings
     }
   },

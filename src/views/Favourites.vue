@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link to="/">⬅ Back</router-link>
+    <router-link :to="{ path: '/', query: $route.query }">⬅ Back</router-link>
 
     <Favourites />
 
@@ -17,4 +17,3 @@ export default {
   }
 }
 </script>
-

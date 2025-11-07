@@ -1,8 +1,8 @@
 import { ref, watch, onMounted } from 'vue';
 
-export default function useDataSlicer(data) {
-  const currentPage = ref(1);
-  const pageSize = ref(20);
+export default function useDataSlicer(data, initialPage = 1, initialPageSize = 20) {
+  const currentPage = ref(initialPage);
+  const pageSize = ref(initialPageSize);
   const slicedData = ref([]);
 
   const sliceData = () => {

@@ -1,9 +1,9 @@
 import { ref, onMounted, watch } from 'vue';
 import { SORT_ORDER } from '../../service/enums.js';
 
-export default function useDataSorter(data, sortings) {
-  const sortingKey = ref('');
-  const sortingMode = ref('');
+export default function useDataSorter(data, sortings, initialSorting = '', initialMode = '') {
+  const sortingKey = ref(initialSorting);
+  const sortingMode = ref(initialMode);
   const sortedData = ref([]);
 
   const sortData = () => {
@@ -30,6 +30,8 @@ export default function useDataSorter(data, sortings) {
   watch([sortingKey, sortingMode, data], sortData);
 
   return {
+    sortingKey,
+    sortingMode,
     sortedData,
     sortHandler
   }

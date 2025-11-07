@@ -1,7 +1,7 @@
 <template>
   <article class="spec-card">
     <h2 class="spec-card-title">
-      <router-link :to="'/spec/' + data.shortname">
+      <router-link :to="{ path: '/spec/' + data.shortname, query: $route.query }">
         {{ data.title }}
       </router-link>
     </h2>

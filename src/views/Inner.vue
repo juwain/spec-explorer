@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link to="/">⬅ Back</router-link>
+    <router-link :to="{ path: '/', query: $route.query }">⬅ Back</router-link>
 
     <specification-details
       :id="$route.params.id"
@@ -19,4 +19,3 @@ export default {
   }
 }
 </script>
-

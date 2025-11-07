@@ -1,7 +1,7 @@
 import { ref, onMounted, watch } from 'vue';
 
-export default function useDataFilter(data, key) {
-  const filterKey = ref('');
+export default function useDataFilter(data, key, initialFilter = '') {
+  const filterKey = ref(initialFilter);
   const filteredData = ref([]);
 
   const filterData = () => {
@@ -25,6 +25,7 @@ export default function useDataFilter(data, key) {
   watch([filterKey, data], filterData);
 
   return {
+    filterKey,
     filteredData,
     filterHandler
   }
